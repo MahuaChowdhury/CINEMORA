@@ -1,0 +1,127 @@
+.people {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.15rem;
+  border-radius: 0.9rem;
+  background: var(--p-surface-900);
+  border: 1px solid var(--p-surface-700);
+}
+
+.people-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+
+  p {
+    margin: 0.15rem 0 0;
+    font-size: 0.8rem;
+    color: var(--p-text-muted-color);
+  }
+}
+
+.people-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.55rem 0.6rem;
+  border-radius: 0.7rem;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+
+  &:hover {
+    background: var(--p-surface-800);
+    border-color: var(--p-surface-700);
+
+    .person-arrow {
+      color: var(--p-primary-400);
+      transform: translateX(2px);
+    }
+  }
+}
+
+.person-name {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.person-arrow {
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+  transition:
+    color 0.2s,
+    transform 0.2s;
+}
+
+:host ::ng-deep .person-avatar {
+  background: color-mix(in srgb, var(--p-primary-500) 22%, transparent);
+  color: var(--p-primary-300);
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.people-empty,
+.people-error {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--p-text-muted-color);
+}
+
+.people-error {
+  color: var(--p-red-400);
+}
+
+.people-skeleton {
+  display: grid;
+  gap: 0.5rem;
+
+  span {
+    height: 2.2rem;
+    border-radius: 0.6rem;
+    background: var(--p-surface-800);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.people-note {
+  margin: 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--p-surface-800);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--p-text-muted-color);
+}

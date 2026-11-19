@@ -1,0 +1,71 @@
+<main class="auth-page">
+  <section class="auth-card">
+    <header class="auth-brand">
+      <span class="brand-word">CINEMORA</span>
+      <span class="brand-sub">CLONE</span>
+    </header>
+
+    <h1>Verify your email</h1>
+    <p class="auth-subtitle">Enter the 6-digit OTP from your inbox. It expires in 5 minutes.</p>
+
+    <form (ngSubmit)="verify()">
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          pInputText
+          id="email"
+          type="email"
+          [ngModel]="email()"
+          (ngModelChange)="email.set($event)"
+          name="email"
+          placeholder="Registered email"
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="field">
+        <label for="otp">6-digit OTP</label>
+        <p-inputotp
+          inputId="otp"
+          name="otp"
+          [ngModel]="otp()"
+          (ngModelChange)="otp.set($event)"
+          [length]="6"
+          [integerOnly]="true"
+        />
+      </div>
+
+      @if (error()) {
+        <p-message severity="error" styleClass="auth-message">{{ error() }}</p-message>
+      }
+      @if (message()) {
+        <p-message severity="success" styleClass="auth-message">{{ message() }}</p-message>
+      }
+
+      <p-button
+        type="submit"
+        label="Verify OTP"
+        icon="pi pi-check-circle"
+        styleClass="login-submit"
+        [loading]="loading()"
+        [fluid]="true"
+      />
+    </form>
+
+    <p-button
+      type="button"
+      label="Resend OTP"
+      icon="pi pi-refresh"
+      styleClass="resend"
+      severity="secondary"
+      [outlined]="true"
+      [loading]="loading()"
+      [fluid]="true"
+      (onClick)="resend()"
+    />
+
+    <p class="auth-footer">
+      <a class="signup" routerLink="/login">Back to login</a>
+    </p>
+  </section>
+</main>

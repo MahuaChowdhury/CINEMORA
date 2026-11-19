@@ -1,0 +1,81 @@
+:host {
+  display: block;
+  background: var(--p-surface-950);
+}
+
+.not-found {
+  position: relative;
+  // Standalone route fills the viewport; inside the shell the header and
+  // content padding already use part of it, so subtract them (see shell.scss).
+  min-height: calc(100dvh - var(--app-chrome-h, 0px));
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 0.6rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  overflow: hidden;
+  background:
+    radial-gradient(48rem 30rem at 50% -10%, rgba(229, 9, 20, 0.28), transparent 62%),
+    var(--p-surface-950);
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    max-width: 34rem;
+    color: var(--p-text-muted-color);
+    line-height: 1.6;
+  }
+}
+
+.nf-glow {
+  position: absolute;
+  top: 34%;
+  left: 50%;
+  width: 28rem;
+  height: 28rem;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(229, 9, 20, 0.3), transparent 65%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.nf-brand {
+  position: relative;
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  color: #fff;
+
+  span {
+    color: var(--p-primary-500);
+  }
+}
+
+.nf-code {
+  position: relative;
+  font-size: clamp(5rem, 18vw, 11rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(229, 9, 20, 0.65);
+  background: linear-gradient(180deg, rgba(229, 9, 20, 0.28), transparent 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.nf-actions {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}

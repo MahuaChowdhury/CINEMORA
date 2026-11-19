@@ -1,0 +1,38 @@
+<main class="inner-page">
+  <header class="page-head">
+    <div>
+      <div class="eyebrow">YOUR FAVORITES</div>
+      <h1>My List</h1>
+      <p class="page-sub">All the stories you saved for later.</p>
+    </div>
+    <span class="count-chip">{{ movies().length }} saved</span>
+  </header>
+
+  @if (error()) {
+    <p-message severity="error" styleClass="list-error">{{ error() }}</p-message>
+  }
+
+  @if (loading()) {
+    <div class="movie-grid">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <app-card-skeleton />
+      }
+    </div>
+  } @else {
+    <div class="movie-grid">
+      @for (movie of movies(); track movie._id) {
+        <app-movie-card
+          [movie]="movie"
+          actionLabel="Remove from List"
+          actionIcon="pi pi-trash"
+          (action)="remove($event)"
+        />
+      } @empty {
+        <div class="empty">
+          Nothing saved yet.
+          <a routerLink="/home/movies">Explore movies →</a>
+        </div>
+      }
+    </div>
+  }
+</main>

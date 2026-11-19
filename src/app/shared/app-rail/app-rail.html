@@ -1,0 +1,26 @@
+<aside class="rail">
+  <div class="profile-card">
+    <p-avatar [label]="initial()" shape="circle" size="large" styleClass="rail-avatar" />
+    <div class="profile-id">
+      <div class="profile-name">{{ user()?.name || 'Guest' }}</div>
+      <div class="profile-status">Online account</div>
+    </div>
+  </div>
+
+  <div class="rail-block">
+    <span class="rail-label">MENU</span>
+    <a class="rail-link" routerLink="/home/news-feed" routerLinkActive="active">
+      <i class="pi pi-th-large"></i>
+      <span>News Feed</span>
+    </a>
+    <a class="rail-link" routerLink="/home/chat" routerLinkActive="active">
+      <i class="pi pi-comments"></i>
+      <span>Messages</span>
+    </a>
+  </div>
+
+  <div class="rail-block">
+    <span class="rail-label">YOUR COMMUNITY</span>
+    <p class="rail-note">Pick a person to start a private conversation.</p>
+  </div>
+</aside>

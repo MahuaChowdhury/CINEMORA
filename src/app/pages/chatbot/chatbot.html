@@ -1,0 +1,87 @@
+<main class="chatbot-page">
+  <header class="bot-header">
+    <a
+      pButton
+      [text]="true"
+      severity="secondary"
+      [rounded]="true"
+      routerLink="/home/browse"
+      aria-label="Back to browsing"
+    >
+      <i class="pi pi-arrow-left"></i>
+    </a>
+    <h1>Mora AI</h1>
+    <span class="chip p-severity-info">Grok AI Assistant</span>
+  </header>
+
+  @if (error()) {
+    <p-message severity="error" styleClass="bot-error">{{ error() }}</p-message>
+  }
+
+  <div class="bot-shell">
+    <aside class="suggestions-panel">
+      <div class="panel-head">
+        <h2>Try asking</h2>
+      </div>
+      <div class="chips">
+        @for (s of suggestions; track s) {
+          <p-chip [label]="s" (click)="onSuggestion(s)" [style]="{ cursor: 'pointer' }" />
+        }
+      </div>
+      <div class="about">
+        <p>Mora is powered by Grok AI and runs through a secure backend proxy — your API key never reaches the browser.</p>
+      </div>
+    </aside>
+
+    <section class="conversation-panel">
+      <div class="messages-area">
+        @for (m of messages(); track $index) {
+          <div class="msg-row" [class.mine]="m.sender === 'user'">
+            <p-avatar
+              [label]="m.sender === 'user' ? 'U' : 'M'"
+              shape="circle"
+              [class]="m.sender === 'user' ? 'user-avatar' : 'bot-avatar'"
+            />
+            <div class="bubble-wrap">
+              <div class="bubble">{{ m.text }}</div>
+            </div>
+          </div>
+        }
+        @if (loading()) {
+          <div class="msg-row bot-typing">
+            <p-avatar label="M" shape="circle" class="bot-avatar" />
+            <div class="bubble-wrap">
+              <div class="typing">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        }
+        @if (messages().length === 1 && !loading()) {
+          <div class="empty">Start a conversation by typing a question or picking a suggestion.</div>
+        }
+      </div>
+
+      <form class="message-form" (ngSubmit)="send()">
+        <input
+          pInputText
+          type="text"
+          name="message"
+          [ngModel]="inputText()"
+          (ngModelChange)="inputText.set($event)"
+          placeholder="Ask Mora about movies…"
+          autocomplete="off"
+          [disabled]="loading()"
+        />
+        <p-button
+          type="submit"
+          label="Send"
+          icon="pi pi-send"
+          iconPos="right"
+          [disabled]="!inputText().trim() || loading()"
+          [loading]="loading()"
+        />
+      </form>
+    </section>
+  </div>
+</main>

@@ -1,0 +1,68 @@
+<article class="movie-card" [class.ranked]="rank() !== null">
+  <div class="card-body">
+    @if (rank() !== null) {
+      <span class="rank" aria-hidden="true">{{ rank() }}</span>
+    }
+
+    <a
+      class="poster"
+      [routerLink]="link()"
+      [attr.aria-label]="movie().title"
+      [style.background]="tint()"
+      (mouseenter)="prefetch()"
+      (focus)="prefetch()"
+    >
+      <img
+        [src]="movie().poster"
+        [alt]="movie().title"
+        loading="lazy"
+        decoding="async"
+        [class.is-loaded]="loaded()"
+        (load)="loaded.set(true)"
+      />
+      <span class="poster-play"><i class="pi pi-play"></i></span>
+      @if (tag()) {
+        <span class="top-tag">{{ tag() }}</span>
+      }
+    </a>
+
+    <div class="quick">
+      <div class="quick-row">
+        <a class="quick-btn play" [routerLink]="link()" [attr.aria-label]="'Play ' + movie().title">
+          <i class="pi pi-play"></i>
+        </a>
+        <button
+          type="button"
+          class="quick-btn"
+          [class.on]="saved()"
+          (click)="toggleSaved($event)"
+          [attr.aria-label]="saved() ? 'Remove from My List' : 'Add to My List'"
+        >
+          <i class="pi" [class.pi-plus]="!saved()" [class.pi-check]="saved()"></i>
+        </button>
+        <a class="quick-btn" [routerLink]="link()" [attr.aria-label]="'More about ' + movie().title">
+          <i class="pi pi-info-circle"></i>
+        </a>
+      </div>
+      <p class="synopsis">{{ movie().description }}</p>
+    </div>
+  </div>
+
+  <div class="card-meta">
+    <h4>
+      <a [routerLink]="link()" (mouseenter)="prefetch()">{{ movie().title }}</a>
+    </h4>
+    <p>{{ movie().year }} • {{ movie().genre }} • {{ movie().duration }}</p>
+
+    @if (actionLabel()) {
+      <p-button
+        [label]="actionLabel() ?? ''"
+        [icon]="actionIcon()"
+        severity="secondary"
+        [text]="true"
+        size="small"
+        (onClick)="action.emit(movie())"
+      />
+    }
+  </div>
+</article>

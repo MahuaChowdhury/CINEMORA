@@ -1,0 +1,80 @@
+@if (loading()) {
+  <div class="detail-skeleton" aria-hidden="true">
+    <div class="sk-backdrop"></div>
+    <div class="sk-body">
+      <div class="sk-line short"></div>
+      <div class="sk-line title"></div>
+      <div class="sk-line short"></div>
+      <div class="sk-line"></div>
+      <div class="sk-line medium"></div>
+      <div class="sk-actions"></div>
+    </div>
+  </div>
+} @else if (movie(); as m) {
+  <main class="detail-page">
+    <div class="detail-backdrop" [style.background]="backdropStyle()"></div>
+
+    <div class="detail-content">
+      <a class="back-link" routerLink="/home/movies">← Back to browsing</a>
+
+      <div class="eyebrow">A CINEMORA ORIGINAL</div>
+      <h1>{{ m.title }}</h1>
+
+      <div class="meta">
+        <span class="match">98% Match</span>
+        <span>{{ m.year }}</span>
+        <span class="rating-tag">{{ m.rating }}</span>
+        <span>{{ m.duration }}</span>
+        <span class="hd">4K ULTRA HD</span>
+      </div>
+
+      <p class="detail-desc">{{ m.description }}</p>
+      <div class="genre-line"><span>Genre: </span>{{ m.genre }}</div>
+
+      <div class="detail-actions">
+        <p-button
+          [label]="playing() ? 'Close Player' : 'Play Movie'"
+          [icon]="playing() ? 'pi pi-times' : 'pi pi-play'"
+          (onClick)="playing.set(!playing())"
+        />
+        <p-button
+          [label]="saved() ? '✓ In My List' : '+ My List'"
+          icon="pi pi-heart"
+          [outlined]="true"
+          severity="secondary"
+          (onClick)="toggleList()"
+        />
+      </div>
+
+      @if (message()) {
+        <p-message severity="info" styleClass="detail-message">{{ message() }}</p-message>
+      }
+
+      @if (playing()) {
+        <div class="player-frame">
+          @if (m.videoUrl) {
+            <video [src]="m.videoUrl" controls autoplay playsinline></video>
+          } @else {
+            <p-message severity="warn">No video URL added. Admin can add a permitted MP4 URL.</p-message>
+          }
+        </div>
+      }
+    </div>
+  </main>
+
+  @if (related().length) {
+    <section class="related">
+      <div class="related-head">
+        <h2>Related Movies</h2>
+        <a routerLink="/home/movies">View all <i class="pi pi-arrow-right"></i></a>
+      </div>
+      <div class="related-grid">
+        @for (item of related(); track item._id) {
+          <app-movie-card [movie]="item" />
+        }
+      </div>
+    </section>
+  }
+} @else if (error()) {
+  <p-message severity="error">{{ error() }}</p-message>
+}

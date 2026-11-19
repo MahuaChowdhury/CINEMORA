@@ -1,0 +1,90 @@
+<div class="social-page">
+  <app-app-rail />
+
+  <section class="feed">
+    <header class="page-head">
+      <div>
+        <h1>News Feed</h1>
+        <p>Share what's on your mind.</p>
+      </div>
+      <span class="count-chip">{{ items().length }} {{ items().length === 1 ? 'post' : 'posts' }}</span>
+    </header>
+
+    @if (error()) {
+      <p-message severity="error" styleClass="feed-error">{{ error() }}</p-message>
+    }
+
+    <form class="composer" (ngSubmit)="publish()">
+      <div class="composer-main">
+        <p-avatar [label]="initial" shape="circle" styleClass="composer-avatar" />
+        <textarea
+          name="postText"
+          [ngModel]="draft()"
+          (ngModelChange)="draft.set($event)"
+          [maxlength]="maxLength"
+          placeholder="What would you like to share?"
+          rows="3"
+        ></textarea>
+      </div>
+      <div class="composer-foot">
+        <span class="char-count">{{ draft().length }}/{{ maxLength }} characters</span>
+        <p-button
+          type="submit"
+          label="Publish Post"
+          icon="pi pi-arrow-up"
+          iconPos="right"
+          [disabled]="!draft().trim() || publishing()"
+          [loading]="publishing()"
+        />
+      </div>
+    </form>
+
+    <p class="section-label">LATEST POSTS</p>
+
+    @if (loading()) {
+      <div class="post-list">
+        @for (i of [1, 2, 3]; track i) {
+          <div class="post-card">
+            <p-skeleton height="3.5rem" borderRadius="0.8rem" />
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="post-list">
+        @for (post of items(); track post._id) {
+          <article class="post-card">
+            <header class="post-head">
+              <p-avatar
+                [label]="initials(post.user?.name || '?')"
+                shape="circle"
+                styleClass="post-avatar"
+              />
+              <div class="post-author">
+                <span class="post-name">{{ post.user?.name || 'Unknown' }}</span>
+                <span class="post-time">{{ post.createdAt | date: 'MMM d, y, h:mm a' }}</span>
+              </div>
+            </header>
+
+            <p class="post-text">{{ post.text }}</p>
+
+            <footer class="post-foot">
+              <button
+                type="button"
+                class="like-btn"
+                [class.liked]="likedByMe(post)"
+                (click)="toggleLike(post)"
+              >
+                <i class="pi" [class.pi-heart-fill]="likedByMe(post)" [class.pi-heart]="!likedByMe(post)"></i>
+                {{ post.likes.length }} Likes
+              </button>
+            </footer>
+          </article>
+        } @empty {
+          <div class="feed-empty">No posts yet — be the first to share something.</div>
+        }
+      </div>
+    }
+  </section>
+
+  <app-people-panel />
+</div>

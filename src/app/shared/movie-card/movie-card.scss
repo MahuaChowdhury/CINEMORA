@@ -1,0 +1,203 @@
+:host {
+  display: block;
+}
+
+.movie-card {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease;
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-0.3rem);
+
+    .poster {
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.55);
+    }
+
+    .poster-play {
+      opacity: 1;
+    }
+
+    .quick {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+  }
+}
+
+.card-body {
+  position: relative;
+}
+
+// Big ghosted rank numeral behind the poster (Top 10 row).
+.rank {
+  position: absolute;
+  left: -1.15rem;
+  bottom: -0.5rem;
+  z-index: 0;
+  font-size: 7.5rem;
+  font-weight: 900;
+  line-height: 0.78;
+  letter-spacing: -0.08em;
+  color: transparent;
+  -webkit-text-stroke: 3px rgba(255, 255, 255, 0.24);
+  pointer-events: none;
+  user-select: none;
+}
+
+.poster {
+  position: relative;
+  z-index: 1;
+  display: block;
+  aspect-ratio: 2 / 3;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  transition: box-shadow 0.25s ease;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transform: scale(1.05);
+    filter: blur(14px);
+    transition:
+      opacity 0.45s ease,
+      filter 0.45s ease,
+      transform 0.45s ease;
+
+    &.is-loaded {
+      opacity: 1;
+      filter: none;
+      transform: none;
+    }
+  }
+
+  .poster-play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(0, 0, 0, 0.32);
+    opacity: 0;
+    transition: opacity 0.2s;
+
+    i {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(229, 9, 20, 0.92);
+      color: #fff;
+      font-size: 0.8rem;
+    }
+  }
+
+  .top-tag {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: var(--p-primary-500);
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+}
+
+// Hover toolbar + synopsis strip, overlaid on the poster so nothing reflows.
+.quick {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 0.7rem;
+  border-radius: 0 0 0.75rem 0.75rem;
+  background: linear-gradient(0deg, rgba(9, 9, 11, 0.97), rgba(9, 9, 11, 0.88) 62%, transparent);
+  opacity: 0;
+  transform: translateY(0.4rem);
+  pointer-events: none;
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+
+.quick-row {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.quick-btn {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.24);
+    transform: translateY(-1px);
+  }
+
+  &.play {
+    background: #fff;
+    border-color: #fff;
+    color: #000;
+  }
+
+  &.on {
+    background: var(--p-primary-600);
+    border-color: var(--p-primary-600);
+  }
+}
+
+.synopsis {
+  margin: 0.5rem 0 0;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: var(--p-text-muted-color);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-meta {
+  padding: 0.65rem 0.25rem 0;
+
+  h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+
+  p {
+    margin: 0.2rem 0 0;
+    font-size: 0.78rem;
+    color: var(--p-text-muted-color);
+  }
+}

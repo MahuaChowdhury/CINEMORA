@@ -1,0 +1,150 @@
+@if (featured(); as hero) {
+  <section class="hero">
+    @for (slide of heroes(); track slide._id; let i = $index) {
+      <div class="hero-bg" [class.active]="heroIndex() === i" [style.background]="heroStyle(slide)"></div>
+    }
+    <div class="hero-scrim" aria-hidden="true"></div>
+
+    @for (slide of heroFrame(); track slide._id) {
+      <div class="hero-inner">
+        <div class="eyebrow"><span class="red-mark">●</span> A CINEMORA ORIGINAL</div>
+        <h1>{{ slide.title }}</h1>
+        <p class="hero-desc">{{ slide.description }}</p>
+        <div class="meta">
+          <span class="match">98% Match</span>
+          <span>{{ slide.year }}</span>
+          <span class="rating-tag">{{ slide.rating }}</span>
+          <span>{{ slide.duration }}</span>
+          <span class="hd">4K ULTRA HD</span>
+        </div>
+        <div class="hero-actions">
+          <a pButton [routerLink]="['/home/movies', slide._id]">
+            <i class="pi pi-play"></i> Play
+          </a>
+          <a pButton severity="secondary" [outlined]="true" [routerLink]="['/home/movies', slide._id]">
+            <i class="pi pi-info-circle"></i> More Info
+          </a>
+        </div>
+      </div>
+    }
+
+    @if (heroes().length > 1) {
+      <div class="hero-dots">
+        @for (slide of heroes(); track slide._id; let i = $index) {
+          <button
+            type="button"
+            class="dot"
+            [class.active]="heroIndex() === i"
+            (click)="goToHero(i)"
+            [attr.aria-label]="'Featured: ' + slide.title"
+          ></button>
+        }
+      </div>
+    }
+  </section>
+}
+
+@defer (on viewport) {
+<section class="bot-spotlight">
+  <div class="bot-aura" aria-hidden="true"></div>
+
+  <div class="bot-copy">
+    <span class="bot-badge"><i class="pi pi-sparkles"></i> AI concierge</span>
+    <h2>Can't pick a film? <span>Ask Mora.</span></h2>
+    <p class="bot-lead">
+      Describe a mood, a genre or a vibe and Mora answers right inside the app — no tab hopping,
+      no endless scrolling.
+    </p>
+
+    <div class="bot-prompts">
+      <a class="prompt" routerLink="/home/chatbot" [queryParams]="{ ask: 'Recommend a sci-fi movie' }">
+        <i class="pi pi-bolt"></i> Recommend a sci-fi movie
+      </a>
+      <a class="prompt" routerLink="/home/chatbot" [queryParams]="{ ask: 'What genres are available?' }">
+        <i class="pi pi-bolt"></i> What genres are available?
+      </a>
+      <a class="prompt" routerLink="/home/chatbot" [queryParams]="{ ask: 'How does My List work?' }">
+        <i class="pi pi-bolt"></i> How does My List work?
+      </a>
+    </div>
+
+    <a pButton class="bot-cta" routerLink="/home/chatbot">
+      <i class="pi pi-sparkles"></i> Chat with Mora
+    </a>
+  </div>
+
+  <div class="bot-visual" aria-hidden="true">
+    <span class="orb-ring orb-ring-1"></span>
+    <span class="orb-ring orb-ring-2"></span>
+    <div class="orb-core"><i class="pi pi-sparkles"></i></div>
+    <div class="bot-chat-demo">
+      <span class="demo-user">Something tense, set in space…</span>
+      <span class="demo-bot"><i class="pi pi-sparkles"></i> Try “Parallel Worlds” — 2h 47m of sleek sci-fi.</span>
+    </div>
+  </div>
+</section>
+} @placeholder {
+  <div class="bot-placeholder" aria-hidden="true"></div>
+}
+
+<section class="toolbar-section">
+  <div class="toolbar-heading">
+    <div class="eyebrow">THE BEST ENTERTAINMENT</div>
+    <h2>Explore <span>Movies</span></h2>
+  </div>
+  <div class="search-wrap">
+    <i class="pi pi-search"></i>
+    <input
+      pInputText
+      [ngModel]="search()"
+      (ngModelChange)="onSearch($event)"
+      placeholder="Search titles..."
+      aria-label="Search titles"
+    />
+  </div>
+</section>
+
+<div class="genre-chips">
+  @for (g of genres; track g) {
+    <button type="button" class="chip" [class.selected]="genre() === g" (click)="pickGenre(g)">
+      {{ g }}
+    </button>
+  }
+</div>
+
+@if (error()) {
+  <p-message severity="error" styleClass="catalog-error">{{ error() }}</p-message>
+}
+
+@if (loading()) {
+  <div class="section-heading"><h3>Loading titles…</h3></div>
+  <div class="movie-grid">
+    @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+      <app-card-skeleton />
+    }
+  </div>
+} @else {
+  @if (!search() && genre() === 'All' && trending().length) {
+    <div class="section-heading">
+      <h3>Top 10 Today</h3>
+      <a class="section-link" routerLink="/home/movies">View all <i class="pi pi-arrow-right"></i></a>
+    </div>
+    <div class="top10-track">
+      @for (m of trending(); track m._id; let i = $index) {
+        <app-movie-card [movie]="m" [rank]="i + 1" />
+      }
+    </div>
+  }
+
+  <div class="section-heading">
+    <h3>{{ search() ? 'Search Results' : genre() === 'All' ? 'Popular on CINEMORA' : genre() + ' Movies' }}</h3>
+    <span class="section-sub">{{ movies().length }} titles</span>
+  </div>
+  <div class="movie-grid">
+    @for (m of movies(); track m._id) {
+      <app-movie-card [movie]="m" [tag]="m.trending ? 'TRENDING' : null" />
+    } @empty {
+      <div class="empty">No titles found. Try another search or category.</div>
+    }
+  </div>
+}

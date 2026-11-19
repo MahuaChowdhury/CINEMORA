@@ -1,0 +1,12 @@
+import {Router} from 'express';import Movie from '../models/Movie.js';import {auth,admin} from '../middleware/auth.js';
+const router=Router();
+const required=['title','description','genre','year','poster','backdrop'];
+const validate=m=>required.filter(k=>m[k]===undefined||m[k]===null||String(m[k]).trim()==='');
+const fields=['title','description','genre','year','duration','rating','poster','backdrop','videoUrl','featured','trending'];
+const clean=body=>Object.fromEntries(fields.filter(k=>body[k]!==undefined).map(k=>[k,body[k]]));
+router.get('/',async(req,res)=>{try{const filter={};if(req.query.genre&&req.query.genre!=='All')filter.genre=req.query.genre;if(req.query.search)filter.title={$regex:String(req.query.search).slice(0,100).replace(/[^a-zA-Z0-9 ]/g,''),$options:'i'};res.json(await Movie.find(filter).sort({createdAt:-1}).limit(200))}catch{res.status(500).json({message:'Could not load movies'})}});
+router.get('/:id',async(req,res)=>{try{const m=await Movie.findById(req.params.id);if(!m)return res.status(404).json({message:'Movie not found'});res.json(m)}catch{res.status(400).json({message:'Invalid movie ID'})}});
+router.post('/',auth,admin,async(req,res)=>{try{const data=clean(req.body),missing=validate(data);if(missing.length)return res.status(400).json({message:'Required: '+missing.join(', ')});res.status(201).json(await Movie.create(data))}catch(e){res.status(400).json({message:e.message})}});
+router.put('/:id',auth,admin,async(req,res)=>{try{const data=clean(req.body);const updated=await Movie.findByIdAndUpdate(req.params.id,data,{new:true,runValidators:true});if(!updated)return res.status(404).json({message:'Movie not found'});res.json(updated)}catch(e){res.status(400).json({message:e.message})}});
+router.delete('/:id',auth,admin,async(req,res)=>{try{const removed=await Movie.findByIdAndDelete(req.params.id);if(!removed)return res.status(404).json({message:'Movie not found'});res.json({message:'Movie deleted'})}catch{res.status(400).json({message:'Invalid movie ID'})}});
+export default router;

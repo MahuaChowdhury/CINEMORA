@@ -1,0 +1,120 @@
+:host {
+  display: block;
+}
+
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  h1 {
+    margin: 0.4rem 0 0.25rem;
+    font-size: clamp(1.7rem, 3vw, 2.2rem);
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--p-text-muted-color);
+  }
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: var(--p-text-muted-color);
+}
+
+.head-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.count-chip {
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--p-primary-500) 16%, transparent);
+  color: var(--p-primary-200);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--p-text-muted-color);
+
+  select {
+    padding: 0.45rem 0.7rem;
+    border-radius: 0.55rem;
+    border: 1px solid var(--p-surface-700);
+    background: var(--p-surface-900);
+    color: var(--p-text-color);
+    font: inherit;
+    font-size: 0.84rem;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: var(--p-primary-500);
+    }
+  }
+}
+
+.genre-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.25rem 0;
+
+  .chip {
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--p-surface-700);
+    border-radius: 999px;
+    background: var(--p-surface-900);
+    color: var(--p-text-muted-color);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition:
+      background 0.2s,
+      color 0.2s,
+      border-color 0.2s;
+
+    &:hover {
+      color: var(--p-text-color);
+      border-color: var(--p-surface-500);
+    }
+
+    &.selected {
+      background: var(--p-primary-600);
+      border-color: var(--p-primary-600);
+      color: #fff;
+      font-weight: 600;
+    }
+  }
+}
+
+.catalogue-error {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr));
+  gap: 1.15rem;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  padding: 3rem 0;
+  text-align: center;
+  color: var(--p-text-muted-color);
+}

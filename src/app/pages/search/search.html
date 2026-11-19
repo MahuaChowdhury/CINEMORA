@@ -1,0 +1,81 @@
+<main class="search-page">
+  <header class="page-head">
+    <form class="search-form" (ngSubmit)="submit()">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        class="search-input"
+        name="q"
+        [ngModel]="query()"
+        (ngModelChange)="onInput($event)"
+        placeholder="Search movies, series..."
+        aria-label="Search the catalog"
+        autocomplete="off"
+      />
+    </form>
+    <span class="count-chip">{{ results().length }} results</span>
+  </header>
+
+  <div class="results-head">
+    <div>
+      <h1>
+        @if (searchedTerm()) {
+          Search results for <span>“{{ searchedTerm() }}”</span>
+        } @else {
+          Search the catalogue
+        }
+      </h1>
+      <p>
+        @if (searchedTerm()) {
+          Showing matches across every genre.
+        } @else {
+          Type a title above to see results.
+        }
+      </p>
+    </div>
+
+    <label class="sort">
+      <span>Sort by</span>
+      <select name="sort" [ngModel]="sort()" (ngModelChange)="sort.set($event)">
+        @for (option of sorts; track option.id) {
+          <option [value]="option.id">{{ option.label }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  <div class="genre-chips">
+    @for (g of genres; track g) {
+      <button type="button" class="chip" [class.selected]="genre() === g" (click)="genre.set(g)">
+        {{ g }}
+      </button>
+    }
+  </div>
+
+  @if (error()) {
+    <p-message severity="error" styleClass="search-error">{{ error() }}</p-message>
+  }
+
+  @if (loading()) {
+    <div class="movie-grid">
+      @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+        <app-card-skeleton />
+      }
+    </div>
+  } @else {
+    <div class="movie-grid">
+      @for (movie of results(); track movie._id) {
+        <app-movie-card [movie]="movie" />
+      } @empty {
+        <div class="empty">
+          @if (searchedTerm()) {
+            No titles match “{{ searchedTerm() }}”{{ genre() === 'All' ? '' : ' in ' + genre() }}.
+            Try a different keyword or genre.
+          } @else {
+            Start typing in the search box to find something to watch.
+          }
+        </div>
+      }
+    </div>
+  }
+</main>

@@ -1,0 +1,166 @@
+<main class="inner-page">
+  <div class="eyebrow">CONTENT MANAGEMENT</div>
+  <h1>Admin <span>Dashboard</span></h1>
+  <p class="page-sub">Manage every title in your CINEMORA catalog.</p>
+
+  <div class="admin-stats">
+    <div><b>{{ movies().length }}</b><span>Total Movies</span></div>
+    <div><b>{{ trendingCount() }}</b><span>Trending Titles</span></div>
+    <div><b>{{ genresCount() }}</b><span>Genres</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <section class="chart-card">
+      <header>
+        <h3>Titles by genre</h3>
+        <span>{{ movies().length }} total</span>
+      </header>
+      @if (genreStats().length) {
+        <div class="donut-wrap">
+          <div class="donut" [style.background]="donutStyle()">
+            <span class="donut-hole">{{ movies().length }}</span>
+          </div>
+          <ul class="legend">
+            @for (stat of genreStats(); track stat.genre) {
+              <li>
+                <i [style.background]="stat.color"></i>
+                <span>{{ stat.genre }}</span>
+                <b>{{ stat.pct }}%</b>
+              </li>
+            }
+          </ul>
+        </div>
+      } @else {
+        <p class="chart-empty">No titles yet.</p>
+      }
+    </section>
+
+    <section class="chart-card">
+      <header>
+        <h3>Catalogue by year</h3>
+        <span>{{ yearSeries().length }} years</span>
+      </header>
+      @if (yearSeries().length > 1) {
+        <svg class="spark" viewBox="0 0 100 36" preserveAspectRatio="none" role="img" aria-label="Titles per release year">
+          <polygon [attr.points]="sparkArea()" class="spark-area" />
+          <polyline [attr.points]="sparkPoints()" class="spark-line" />
+        </svg>
+        <div class="spark-axis">
+          @for (point of yearSeries(); track point.year) {
+            <span>{{ point.year }}</span>
+          }
+        </div>
+      } @else {
+        <p class="chart-empty">Add a few more titles to see the trend.</p>
+      }
+    </section>
+  </div>
+
+  @if (message()) {
+    <p-message severity="info" styleClass="admin-message">{{ message() }}</p-message>
+  }
+
+  <div class="form-head">
+    <h2>{{ editingId() ? 'Edit Movie' : 'Add New Movie' }}</h2>
+    @if (editingId()) {
+      <p-button label="Cancel Edit" icon="pi pi-times" severity="secondary" [outlined]="true" (onClick)="cancelEdit()" />
+    }
+  </div>
+
+  <form class="admin-form" (ngSubmit)="submit()">
+    <div class="form-row">
+      <label>
+        Movie Title *
+        <input pInputText name="title" [(ngModel)]="form.title" required />
+      </label>
+      <label>
+        Genre *
+        <p-select
+          name="genre"
+          [(ngModel)]="form.genre"
+          [options]="genres"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="w-full"
+        />
+      </label>
+    </div>
+
+    <div class="form-row three">
+      <label>
+        Release Year *
+        <input pInputText type="number" name="year" [(ngModel)]="form.year" min="1888" max="2100" required />
+      </label>
+      <label>
+        Duration
+        <input pInputText name="duration" [(ngModel)]="form.duration" placeholder="1h 45m" />
+      </label>
+      <label>
+        Rating
+        <input pInputText name="rating" [(ngModel)]="form.rating" placeholder="PG-13" />
+      </label>
+    </div>
+
+    <label>
+      Description *
+      <textarea pTextarea name="description" [(ngModel)]="form.description" rows="3" required></textarea>
+    </label>
+
+    <div class="form-row">
+      <label>
+        Poster Image URL *
+        <input pInputText type="url" name="poster" [(ngModel)]="form.poster" placeholder="https://..." required />
+      </label>
+      <label>
+        Backdrop Image URL *
+        <input pInputText type="url" name="backdrop" [(ngModel)]="form.backdrop" placeholder="https://..." required />
+      </label>
+    </div>
+
+    <label>
+      Video URL (permitted MP4)
+      <input pInputText type="url" name="videoUrl" [(ngModel)]="form.videoUrl" placeholder="https://.../movie.mp4" />
+    </label>
+
+    <div class="form-checks">
+      <p-checkbox binary name="featured" label="Featured (hero banner)" [(ngModel)]="form.featured" />
+      <p-checkbox binary name="trending" label="Trending (Top 10 row)" [(ngModel)]="form.trending" />
+    </div>
+
+    <p-button
+      type="submit"
+      [label]="editingId() ? 'Save Changes' : 'Add Movie'"
+      icon="pi pi-check"
+      [loading]="saving()"
+      [disabled]="!form.title || !form.description || !form.poster || !form.backdrop"
+    />
+  </form>
+
+  <div class="form-head">
+    <h2>Catalog</h2>
+  </div>
+
+  @if (loading()) {
+    <div class="catalog-grid">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <p-skeleton height="8rem" borderRadius="0.75rem" />
+      }
+    </div>
+  } @else {
+    <div class="catalog-grid">
+      @for (m of movies(); track m._id) {
+        <div class="catalog-item">
+          <img [src]="m.poster" [alt]="m.title" loading="lazy" />
+          <div class="item-info">
+            <h4>{{ m.title }}</h4>
+            <p>{{ m.genre }} • {{ m.year }} @if (m.featured) {<span class="pill">FEATURED</span>} @if (m.trending) {<span class="pill red">TRENDING</span>}</p>
+          </div>
+          <div class="item-actions">
+            <p-button icon="pi pi-pencil" severity="secondary" [text]="true" [rounded]="true" ariaLabel="Edit" (onClick)="edit(m)" />
+            <p-button icon="pi pi-trash" severity="danger" [text]="true" [rounded]="true" ariaLabel="Delete" (onClick)="remove(m)" />
+          </div>
+        </div>
+      }
+    </div>
+  }
+</main>

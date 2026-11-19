@@ -1,0 +1,77 @@
+<main class="auth-page">
+  <div class="auth-glow" aria-hidden="true"></div>
+
+  <section class="auth-card">
+    <header class="auth-brand">
+      <span class="brand-word">CINE</span>
+      <span class="brand-sub">MORA</span>
+    </header>
+
+    <h1>Welcome back</h1>
+    <p class="auth-subtitle">Sign in to keep watching.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          pInputText
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="you&#64;example.com"
+          autocomplete="email"
+        />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <small class="field-error">
+            {{
+              form.controls.email.hasError('required')
+                ? 'Email is required.'
+                : 'Please enter a valid email.'
+            }}
+          </small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <p-password
+          inputId="password"
+          formControlName="password"
+          [toggleMask]="true"
+          [feedback]="false"
+          placeholder="Your password"
+        />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <small class="field-error">
+            {{
+              form.controls.password.hasError('required')
+                ? 'Password is required.'
+                : 'Password must be at least 8 characters.'
+            }}
+          </small>
+        }
+      </div>
+
+      @if (error()) {
+        <p-message severity="error" styleClass="auth-message">{{ error() }}</p-message>
+      }
+
+      <p-button
+        type="submit"
+        label="Sign In"
+        icon="pi pi-sign-in"
+        styleClass="login-submit"
+        [loading]="loading()"
+        [fluid]="true"
+      />
+    </form>
+
+    <p class="auth-footer">
+      New here?
+      <a class="signup" routerLink="/register">Create an account</a>
+    </p>
+    <p class="auth-footer">
+      <a class="signup" routerLink="/verify-otp">Verify email / resend OTP</a>
+    </p>
+  </section>
+</main>

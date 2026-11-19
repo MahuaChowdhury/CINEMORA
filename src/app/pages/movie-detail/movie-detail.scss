@@ -1,0 +1,208 @@
+:host {
+  display: block;
+}
+
+// Hero-shaped placeholder so the page does not jump when the data lands.
+.detail-skeleton {
+  position: relative;
+  min-height: 34rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--p-surface-900);
+}
+
+.sk-backdrop {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, var(--p-surface-800), var(--p-surface-900));
+}
+
+.sk-body {
+  position: relative;
+  display: grid;
+  gap: 0.7rem;
+  max-width: 42rem;
+  padding: 6rem 2.25rem 2rem;
+}
+
+.sk-line,
+.sk-actions {
+  height: 0.85rem;
+  border-radius: 0.4rem;
+  background: var(--p-surface-700);
+  opacity: 0.7;
+
+  &.short {
+    width: 8rem;
+  }
+
+  &.title {
+    width: 60%;
+    height: 2.2rem;
+  }
+
+  &.medium {
+    width: 65%;
+  }
+}
+
+.sk-actions {
+  width: 14rem;
+  height: 2.4rem;
+  margin-top: 0.8rem;
+  border-radius: 0.55rem;
+}
+
+.detail-page {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  min-height: 34rem;
+}
+
+.detail-backdrop {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--p-surface-900);
+}
+
+.detail-content {
+  position: relative;
+  z-index: 1;
+  max-width: 52rem;
+  padding: 2rem 2.25rem;
+}
+
+.back-link {
+  font-size: 0.88rem;
+  color: var(--p-text-muted-color);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--p-text-color);
+  }
+}
+
+.eyebrow {
+  margin-top: 2.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: var(--p-text-muted-color);
+}
+
+h1 {
+  margin: 0.6rem 0 0.5rem;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  letter-spacing: -0.02em;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-bottom: 1.1rem;
+  font-size: 0.88rem;
+  color: var(--p-text-muted-color);
+
+  .match {
+    color: var(--p-green-400);
+    font-weight: 700;
+  }
+
+  .rating-tag {
+    padding: 0.05rem 0.45rem;
+    border: 1px solid var(--p-surface-500);
+    border-radius: 0.25rem;
+  }
+
+  .hd {
+    color: var(--p-primary-400);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+.detail-desc {
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+
+.genre-line {
+  margin: 0.9rem 0 1.6rem;
+  color: var(--p-text-muted-color);
+
+  span {
+    font-weight: 600;
+    color: var(--p-text-color);
+  }
+}
+
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.detail-message {
+  display: block;
+  margin-top: 1rem;
+}
+
+.related {
+  margin-top: 2.5rem;
+}
+
+.related-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--p-text-muted-color);
+    text-decoration: none;
+
+    i {
+      font-size: 0.7rem;
+    }
+
+    &:hover {
+      color: var(--p-primary-400);
+    }
+  }
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr));
+  gap: 1.15rem;
+}
+
+.player-frame {
+  margin-top: 1.75rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+
+  video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+}

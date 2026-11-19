@@ -1,0 +1,91 @@
+<div class="social-page">
+  <app-app-rail />
+
+  <section class="conversation-column">
+    <header class="page-head">
+      <div>
+        <h1>Messages</h1>
+        <p>Real-time one-to-one conversations.</p>
+      </div>
+      <span class="status-chip" [class.online]="connected()" [class.offline]="!connected()">
+        {{ connected() ? 'Connected' : 'Connecting…' }}
+      </span>
+    </header>
+
+    @if (error()) {
+      <p-message severity="error" styleClass="chat-error">{{ error() }}</p-message>
+    }
+
+    <div class="conversation-card">
+      @if (selectedUser(); as user) {
+        <div class="conv-head">
+          <p-avatar [label]="initials(user.name)" shape="circle" styleClass="conv-avatar" />
+          <div class="conv-id">
+            <span class="conv-name">{{ user.name }}</span>
+            <span class="conv-sub">Direct message</span>
+          </div>
+          <p-button
+            type="button"
+            icon="pi pi-times"
+            [text]="true"
+            [rounded]="true"
+            severity="secondary"
+            ariaLabel="Close conversation"
+            (onClick)="closeConversation()"
+          />
+        </div>
+
+        <div class="messages-area">
+          @if (loadingHistory()) {
+            <div class="history-skeleton">
+              @for (i of [1, 2, 3]; track i) {
+                <p-skeleton height="2.25rem" width="60%" borderRadius="0.9rem" />
+              }
+            </div>
+          } @else {
+            @for (m of activeMessages(); track m._id) {
+              <div class="msg-row" [class.mine]="m.sender === me()?.id">
+                <div class="bubble">
+                  <span class="bubble-text">{{ m.text }}</span>
+                  <span class="bubble-time">{{ m.createdAt | date: 'shortTime' }}</span>
+                </div>
+              </div>
+            } @empty {
+              <div class="conversation-empty">
+                No messages yet. Say hello to {{ user.name }}!
+              </div>
+            }
+          }
+        </div>
+
+        <form class="composer" (ngSubmit)="sendMessage()">
+          <input
+            pInputText
+            name="messageText"
+            [ngModel]="messageText()"
+            (ngModelChange)="messageText.set($event)"
+            placeholder="Type a message..."
+            autocomplete="off"
+            maxlength="1000"
+            [disabled]="!connected()"
+          />
+          <p-button
+            type="submit"
+            label="Send"
+            icon="pi pi-send"
+            iconPos="right"
+            [disabled]="!messageText().trim() || !connected()"
+          />
+        </form>
+      } @else {
+        <div class="conversation-empty-card">
+          <p-avatar label="💬" shape="circle" size="xlarge" styleClass="empty-avatar" />
+          <h2>Select a conversation</h2>
+          <p>Pick someone from People to start a private conversation.</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <app-people-panel />
+</div>

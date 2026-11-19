@@ -1,0 +1,48 @@
+<aside class="people">
+  <div class="people-head">
+    <div>
+      <h2>People</h2>
+      <p>Connect with your community</p>
+    </div>
+    <p-button
+      type="button"
+      icon="pi pi-refresh"
+      [text]="true"
+      [rounded]="true"
+      severity="secondary"
+      ariaLabel="Refresh people"
+      [loading]="loading()"
+      (onClick)="load()"
+    />
+  </div>
+
+  @if (error()) {
+    <p class="people-error">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <div class="people-skeleton">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  } @else {
+    <ul class="people-list">
+      @for (user of users(); track user._id) {
+        <li>
+          <button type="button" class="person" (click)="message(user)">
+            <p-avatar [label]="initials(user.name)" shape="circle" styleClass="person-avatar" />
+            <span class="person-name">{{ user.name }}</span>
+            <i class="pi pi-arrow-right person-arrow"></i>
+          </button>
+        </li>
+      } @empty {
+        <li class="people-empty">No one else is here yet.</li>
+      }
+    </ul>
+  }
+
+  <p class="people-note">
+    Open this app in another browser window and join with a different name to test real-time chat.
+  </p>
+</aside>

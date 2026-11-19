@@ -1,0 +1,103 @@
+<header class="app-header">
+  <div class="header-side">
+    <p-button
+      icon="pi pi-bars"
+      [text]="true"
+      [rounded]="true"
+      severity="secondary"
+      ariaLabel="Toggle navigation"
+      styleClass="nav-toggle"
+      (onClick)="sidenav.set(true)"
+    />
+    <a class="brand" routerLink="/home/browse">CINE<span>MORA</span></a>
+  </div>
+
+  <nav class="header-nav">
+    @for (item of layout.navItems; track item.id) {
+      @if (!item.adminOnly || isAdmin()) {
+        <a class="nav-link" [routerLink]="item.link" routerLinkActive="active" (click)="onNavClick(item.id)">
+          {{ item.label }}
+        </a>
+      }
+    }
+  </nav>
+
+  <div class="header-side right">
+    <div class="header-search-wrap">
+      <form class="header-search" (ngSubmit)="search()">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          name="headerSearch"
+          [ngModel]="query()"
+          (ngModelChange)="onQuery($event)"
+          (focus)="openSuggestions()"
+          (blur)="closeSuggestions()"
+          placeholder="Search movies, series..."
+          aria-label="Search the catalog"
+          autocomplete="off"
+        />
+      </form>
+
+      @if (suggestOpen() && suggestions().length) {
+        <div class="suggest">
+          @for (movie of suggestions(); track movie._id) {
+            <button type="button" class="suggest-item" (mousedown)="openSuggestion(movie)">
+              <img [src]="movie.poster" [alt]="movie.title" loading="lazy" />
+              <span>
+                <b>{{ movie.title }}</b>
+                <small>{{ movie.year }} • {{ movie.genre }}</small>
+              </span>
+            </button>
+          }
+          <button type="button" class="suggest-all" (mousedown)="search()">
+            See all results <i class="pi pi-arrow-right"></i>
+          </button>
+        </div>
+      }
+    </div>
+
+    <button type="button" class="avatar-trigger" (click)="userMenu.toggle($event)" aria-label="Account menu">
+      <p-avatar [label]="userInitial()" shape="circle" styleClass="user-avatar" />
+      <i class="pi pi-angle-down"></i>
+    </button>
+    <p-menu
+      #userMenu
+      [popup]="true"
+      [model]="userMenuItems"
+      appendTo="body"
+      styleClass="user-menu"
+    />
+  </div>
+</header>
+
+<p-drawer
+  [(visible)]="sidenav"
+  [modal]="false"
+  [blockScroll]="true"
+  styleClass="app-sidenav"
+>
+  <ng-template #header>
+    <span class="sidenav-title">Browse</span>
+  </ng-template>
+
+  <nav class="sidenav-nav">
+    @for (item of layout.navItems; track item.id) {
+      @if (!item.adminOnly || isAdmin()) {
+        <a
+          class="sidenav-link"
+          [routerLink]="item.link"
+          routerLinkActive="active"
+          (click)="onNavClick(item.id)"
+        >
+          <i [class]="item.icon"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    }
+  </nav>
+</p-drawer>
+
+<main class="app-content">
+  <router-outlet />
+</main>
