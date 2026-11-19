@@ -225,11 +225,11 @@ The project presentation is available in both formats:
 
 ## 🔒 Security Notes
 
-- Never upload `.env` files or expose API credentials.
-- Use your own MongoDB connection string and Gmail App Password.
-- Keep JWT secrets private.
-- The `.env.example` file contains configuration placeholders.
-
+- Passwords are securely hashed using bcrypt.
+- JWT is used for user authentication.
+- Email OTP verification is implemented during registration.
+- Sensitive credentials and environment variables are excluded from version control.
+- Configure your own environment variables before running the application.
 ---
 
 ## 👩‍💻 Developed By
