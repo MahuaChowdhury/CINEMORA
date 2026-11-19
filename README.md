@@ -1,73 +1,247 @@
-# Netflix Clone — Angular 22 + PrimeNG + MEAN backend
+# 🎬 CINEMORA – Movie Streaming Platform
 
-Netflix-inspired streaming demo. Angular 22 frontend with PrimeNG (Aura preset, Netflix-red dark theme) and an Express + MongoDB backend with JWT auth and email OTP verification.
+**CINEMORA** is a Netflix-inspired movie streaming web application developed using the **MEAN Stack (MongoDB, Express.js, Angular and Node.js)**. It provides an interactive movie-browsing and streaming experience, enhanced with an AI-powered chatbot named **MORA** and a real-time communication system.
 
-## Features
+The project combines modern frontend design, backend API development, database management, AI integration and real-time messaging into a single web application.
 
-- **Auth with email OTP** — register → 6-digit OTP mailed via Gmail SMTP → verify → login (JWT, 7-day sessions)
-- **Movie catalog API** — search, genre filter, featured/trending flags, admin-only CRUD
-- **Watchlist ("My List")** — per-user saved titles
-- **Frontend** — login/register/OTP pages, browse page (hero, trending row, genre chips, live search), movie detail with player, My List, Admin dashboard, header + drawer sidenav (PrimeNG)
+---
 
-## Requirements
+## ✨ Key Features
+
+### 🎥 Movie Streaming Platform
+- Interactive homepage with featured and trending movies.
+- Browse movies by genre and category.
+- Live movie search.
+- Detailed movie information and video player.
+- Personal watchlist through the My List feature.
+
+### 🤖 MORA – AI Chat Assistant
+- Integrated chatbot for conversational assistance.
+- Helps users with movie-related queries.
+- Interactive chat interface within CINEMORA.
+
+### 💬 Real-Time Communication
+- Real-time user-to-user chat conversations.
+- Socket.IO integration for instant messaging.
+- Dedicated chat interface.
+
+### 🔐 Authentication & User Management
+- User registration and login.
+- Email-based OTP verification.
+- Secure password hashing.
+- JWT-based authentication.
+- OTP resend and verification functionality.
+
+### 🛠️ Admin Dashboard
+- Dedicated administrative interface.
+- Movie management functionality.
+- Administrative access and protected operations.
+
+### 📱 User Interface
+- Responsive and interactive Angular frontend.
+- PrimeNG UI components.
+- Header navigation and drawer sidebar.
+- Modern dark-themed streaming interface.
+
+---
+
+## 🧰 Technology Stack
+
+| Layer | Technologies |
+|---|---|
+| Frontend | Angular 22, TypeScript, SCSS |
+| UI Components | PrimeNG, PrimeIcons |
+| Backend | Node.js, Express.js |
+| Database | MongoDB, Mongoose |
+| Authentication | JWT, bcryptjs |
+| Real-Time Communication | Socket.IO |
+| Email Services | Nodemailer, Gmail SMTP |
+| AI Integration | MORA Chatbot |
+
+---
+
+## 📸 Application Screenshots
+
+The following screenshots showcase the major modules of CINEMORA.
+
+| Module | Screenshot |
+|---|---|
+| Homepage | `screenshots/home.png` |
+| Movie Details | `screenshots/movie-details.png` |
+| MORA Chatbot | `screenshots/mora-chatbot.png` |
+| Real-Time Chat | `screenshots/realtime-chat.png` |
+| Admin Dashboard | `screenshots/admin-dashboard.png` |
+
+---
+
+## 📂 Project Structure
+
+```text
+CINEMORA/
+│
+├── backend/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── sockets/
+│   ├── server.js
+│   ├── seed.js
+│   └── package.json
+│
+├── public/
+│
+├── src/
+│   └── app/
+│       ├── guards/
+│       ├── layout/
+│       ├── pages/
+│       ├── services/
+│       └── shared/
+│
+├── screenshots/
+│
+├── CINEMORA_Project_Presentation.pdf
+├── CINEMORA_Project_Presentation.pptx
+├── package.json
+├── angular.json
+└── README.md
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### Prerequisites
 
 - Node.js 20.19+ / 22.12+ / 24.x
-- MongoDB running locally, or a MongoDB Atlas URI
-- A Gmail address with 2-Step Verification and an App Password (for OTP emails)
+- npm
+- MongoDB (local installation or MongoDB Atlas)
+- Gmail account with 2-Step Verification and an App Password for OTP emails.
 
-## Backend setup
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/MahuaChowdhury/CINEMORA.git
+cd CINEMORA
+```
+
+### 2. Backend Setup
 
 ```bash
 cd backend
 npm install
 ```
 
-1. Copy `.env.example` to `.env` and configure `MONGO_URI`, `JWT_SECRET`, `SMTP_EMAIL`, `SMTP_APP_PASSWORD`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`.
-2. Optionally seed demo movies + admin account:
+Create a `.env` file inside the `backend` folder using `.env.example` as a reference.
 
-   ```bash
-   npm run seed
-   ```
+Configure the following environment variables:
 
-   (WARNING: wipes and recreates demo movies; use once on a throwaway database.)
-3. Start the API:
+```env
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+SMTP_EMAIL=your_gmail_address
+SMTP_APP_PASSWORD=your_gmail_app_password
+ADMIN_EMAIL=your_admin_email
+ADMIN_PASSWORD=your_admin_password
+```
 
-   ```bash
-   npm run dev
-   ```
+### 3. Seed Demo Data (Optional)
 
-4. Health check: http://localhost:5000/api/health
+```bash
+npm run seed
+```
 
-## Frontend setup
+This initializes the demo movie collection and admin account. **Warning:** The seed script wipes and recreates demo movies. Use only with a suitable development database.
+
+### 4. Start the Backend
+
+```bash
+npm run dev
+```
+
+Backend API:
+
+`http://localhost:5000`
+
+Health check:
+
+`http://localhost:5000/api/health`
+
+### 5. Frontend Setup
+
+Open another terminal from the project root:
 
 ```bash
 npm install
 npm start
 ```
 
-Open http://localhost:4200
+Open the application:
 
-## OTP flow
+`http://localhost:4200`
 
-Register → OTP emailed → Verify OTP → Login → My List. The OTP is bcrypt-hashed in MongoDB, valid for 5 minutes, with 5 verification attempts and a 60-second resend cooldown. The seeded admin account is pre-verified.
+---
 
-## Gmail SMTP
+## 🔑 Authentication Flow
 
-Enable 2-Step Verification on the Gmail account, create an App Password, and use it as `SMTP_APP_PASSWORD` (not your normal Gmail password). Never commit `.env` or share secrets.
+1. User registers with the required details.
+2. An OTP is sent to the registered email address.
+3. User verifies the OTP.
+4. User logs in to CINEMORA.
+5. Authenticated users can access their personalized features, including My List.
 
-## API overview
+OTP verification uses bcrypt hashing, a 5-minute validity period, a maximum of 5 verification attempts and a 60-second resend cooldown.
 
-| Endpoint | Method | Auth | Description |
-| --- | --- | --- | --- |
-| `/api/health` | GET | — | Health check |
-| `/api/auth/register` | POST | — | Create account, sends OTP |
-| `/api/auth/verify-otp` | POST | — | Verify 6-digit OTP |
-| `/api/auth/resend-otp` | POST | — | Resend OTP (60 s cooldown) |
-| `/api/auth/login` | POST | — | Login, returns JWT + user |
-| `/api/auth/me` | GET | JWT | Current user |
-| `/api/movies` | GET | — | List/search movies (`?search=`, `?genre=`) |
-| `/api/movies/:id` | GET | — | Movie detail |
-| `/api/movies` | POST | Admin | Create movie |
-| `/api/movies/:id` | PUT/DELETE | Admin | Update/delete movie |
-| `/api/watchlist` | GET | JWT | List saved movies |
-| `/api/watchlist/:id` | POST/DELETE | JWT | Add/remove from watchlist |
+---
+
+## 🔌 API Overview
+
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/api/health` | GET | Backend health check |
+| `/api/auth/register` | POST | User registration |
+| `/api/auth/verify-otp` | POST | OTP verification |
+| `/api/auth/resend-otp` | POST | Resend OTP |
+| `/api/auth/login` | POST | User login |
+| `/api/auth/me` | GET | Retrieve current user |
+| `/api/movies` | GET | Retrieve and search movies |
+| `/api/movies/:id` | GET | Retrieve movie details |
+| `/api/movies` | POST | Add a movie (Admin) |
+| `/api/movies/:id` | PUT / DELETE | Update or delete a movie (Admin) |
+| `/api/watchlist` | GET | Retrieve watchlist |
+| `/api/watchlist/:id` | POST / DELETE | Manage watchlist |
+
+---
+
+## 📄 Project Documentation
+
+The project presentation is available in both formats:
+
+- [CINEMORA Project Presentation (PDF)](CINEMORA_Project_Presentation.pdf)
+- [CINEMORA Project Presentation (PPTX)](CINEMORA_Project_Presentation.pptx)
+
+---
+
+## 🔒 Security Notes
+
+- Never upload `.env` files or expose API credentials.
+- Use your own MongoDB connection string and Gmail App Password.
+- Keep JWT secrets private.
+- The `.env.example` file contains configuration placeholders.
+
+---
+
+## 👩‍💻 Developed By
+
+**Mahua Chowdhury**
+
+GitHub: [MahuaChowdhury](https://github.com/MahuaChowdhury)
+
+**Project:** CINEMORA – Movie Streaming Platform  
+**Technology:** MEAN Stack  
+**Repository:** [github.com/MahuaChowdhury/CINEMORA](https://github.com/MahuaChowdhury/CINEMORA)
+
+---
+
+*Built as a full-stack development project to explore modern web technologies, AI-assisted interaction and real-time communication.*
